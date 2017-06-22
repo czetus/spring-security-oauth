@@ -44,8 +44,7 @@
 		<h1>Your Sparklr Photos</h1>
 		<ul class="list-unstyled">
 			<c:forEach var="sparklrPhotoId" items="${photoIds}">
-				<li><img
-					src="${base}sparklr/photos/${sparklrPhotoId}" /></li>
+				<li><img src="${base}sparklr/photos/${sparklrPhotoId}" /></li>
 			</c:forEach>
 		</ul>
 	</div>

@@ -3,6 +3,7 @@ package org.springframework.security.oauth.examples.tonr.impl;
 import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
 import org.springframework.security.oauth.examples.tonr.SparklrException;
 import org.springframework.security.oauth.examples.tonr.SparklrService;
+import org.springframework.web.client.RestOperations;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -24,7 +25,9 @@ public class SparklrServiceImpl implements SparklrService {
 
   private String sparklrPhotoListURL;
   private String sparklrPhotoURLPattern;
-  private OAuthRestTemplate sparklrRestTemplate;
+  private RestOperations sparklrRestTemplate;
+  private String sparklrTrustedMessageURL;
+  private RestOperations trustedClientRestTemplate;
 
   public List<String> getSparklrPhotoIds() throws SparklrException {
     try {
@@ -78,11 +81,21 @@ public class SparklrServiceImpl implements SparklrService {
     this.sparklrPhotoListURL = sparklrPhotoListURL;
   }
 
-  public OAuthRestTemplate getSparklrRestTemplate() {
+  public RestOperations getSparklrRestTemplate() {
     return sparklrRestTemplate;
   }
 
-  public void setSparklrRestTemplate(OAuthRestTemplate sparklrRestTemplate) {
+  public void setSparklrRestTemplate(RestOperations sparklrRestTemplate) {
     this.sparklrRestTemplate = sparklrRestTemplate;
   }
+
+public void setSparklrTrustedMessageURL(String sparklrTrustedMessageURL) {
+	this.sparklrTrustedMessageURL = sparklrTrustedMessageURL;
+}
+
+public void setTrustedClientRestTemplate(RestOperations trustedClientRestTemplate) {
+	this.trustedClientRestTemplate = trustedClientRestTemplate;
+}
+  
+  
 }

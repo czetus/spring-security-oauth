@@ -1,0 +1,6 @@
+#hubic:
+#  ClientId: api_hubic_LMifNw9mzgbnTot06kPSDj45oHdNDBky
+#  ClientSecret: 3x107Y9rRcqNlYHYRgNVADvROXd2BWlp6C04bRiMWRpCZkhKMsBRXRC0YJZ0g1gv
+#  Base64: YXBpX2h1YmljX0xNaWZOdzltemdiblRvdDA2a1BTRGo0NW9IZE5EQmt5OjN4MTA3WTlyUmNxTmxZSFlSZ05WQUR2Uk9YZDJCV2xwNkMwNGJSaU1XUnBDWmtoS01zQlJYUkMwWUpaMGcxZ3Y=
+#  redirectURI: http://localhost/tonr2/about/
+#  grant_Type: authorization_code

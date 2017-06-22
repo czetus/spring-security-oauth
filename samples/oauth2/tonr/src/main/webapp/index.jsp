@@ -66,13 +66,13 @@
 					photos</a>
 			</p>
 			<p>
-				<form action="${base}logout" method="post">
-					<fieldset>
-						<button class="btn btn-primary" type="submit">Logout</button>
-						<input type="hidden" name="${_csrf.parameterName}"
-							   value="${_csrf.token}" />
-					</fieldset>
-				</form>
+			<form action="${base}logout" method="post">
+				<fieldset>
+					<button class="btn btn-primary" type="submit">Logout</button>
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+				</fieldset>
+			</form>
 			</p>
 		</authz:authorize>
 

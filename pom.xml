@@ -339,10 +339,10 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
-      </plugin>
+      </plugin>	
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
@@ -511,4 +511,22 @@
 
   </distributionManagement>
 
+  <dependencies>
+  	<dependency>
+  		<groupId>org.springframework.boot</groupId>
+  		<artifactId>spring-boot-configuration-processor</artifactId>
+  		<optional>true</optional>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework.boot</groupId>
+  		<artifactId>spring-boot-configuration-processor</artifactId>
+  		<version>1.5.4.RELEASE</version>
+  		<optional>true</optional>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework.boot</groupId>
+  		<artifactId>spring-boot-starter-data-couchbase</artifactId>
+  		<version>1.5.4.RELEASE</version>
+  	</dependency>
+  </dependencies>
 </project>

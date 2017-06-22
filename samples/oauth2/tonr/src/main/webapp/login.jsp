@@ -28,10 +28,9 @@
 		</div>
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-					<li><a href="${base}index.jsp">home</a></li>
-					<li><a href="${base}sparklr/photos">sparklr pics</a></li>
-					<li><a href="${base}facebook/info">facebook
-							friends</a></li>
+				<li><a href="${base}index.jsp">home</a></li>
+				<li><a href="${base}sparklr/photos">sparklr pics</a></li>
+				<li><a href="${base}facebook/info">facebook friends</a></li>
 			</ul>
 		</div>
 	</div>

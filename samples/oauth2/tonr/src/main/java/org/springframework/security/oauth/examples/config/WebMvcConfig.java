@@ -1,5 +1,6 @@
 package org.springframework.security.oauth.examples.config;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ConversionServiceFactoryBean;
@@ -21,13 +23,22 @@ import org.springframework.security.oauth.examples.tonr.impl.SparklrServiceImpl;
 import org.springframework.security.oauth.examples.tonr.mvc.FacebookController;
 import org.springframework.security.oauth.examples.tonr.mvc.SparklrController;
 import org.springframework.security.oauth.examples.tonr.mvc.SparklrRedirectController;
+import org.springframework.security.oauth.examples.tonr.mvc.HubicController;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.client.token.AccessTokenProvider;
+import org.springframework.security.oauth2.client.token.AccessTokenProviderChain;
+import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsAccessTokenProvider;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
+import org.springframework.security.oauth2.client.token.grant.implicit.ImplicitAccessTokenProvider;
+import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordAccessTokenProvider;
 import org.springframework.security.oauth2.common.AuthenticationScheme;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
 import org.springframework.web.client.RestOperations;
@@ -48,6 +59,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+		
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
@@ -95,6 +107,16 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	RestOperations facebookRestTemplate) {
 		FacebookController controller = new FacebookController();
 		controller.setFacebookRestTemplate(facebookRestTemplate);
+	
+		return controller;
+	}
+	
+	@Bean
+	public HubicController hubicController (@Qualifier("hubicRestTemplate")
+	OAuth2RestOperations hubicRestTemplate){
+		HubicController controller = new HubicController();
+		controller.setHubicRestTemplate(hubicRestTemplate);
+		
 		return controller;
 	}
 
@@ -192,8 +214,33 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 			details.setTokenName("oauth_token");
 			details.setAuthenticationScheme(AuthenticationScheme.query);
 			details.setClientAuthenticationScheme(AuthenticationScheme.form);
+			
 			return details;
 		}
+		
+		@Bean 
+		public OAuth2ProtectedResourceDetails hubic(){
+			AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
+			
+			List<String> scopes = new ArrayList<String>();
+			scopes.add("usage.r,account.r,getAllLinks.r,credentials.r,links.drw");
+
+			
+			details.setId("apka123");
+			details.setClientId("api_hubic_LMifNw9mzgbnTot06kPSDj45oHdNDBky");
+			details.setClientSecret("3x107Y9rRcqNlYHYRgNVADvROXd2BWlp6C04bRiMWRpCZkhKMsBRXRC0YJZ0g1gv");
+			details.setAccessTokenUri("https://api.hubic.com/oauth/token");
+			details.setUserAuthorizationUri("https://api.hubic.com/oauth/authorize/");
+			details.setPreEstablishedRedirectUri("http://localhost/tonr2/about/");
+//			details.setAuthenticationScheme(AuthenticationScheme.header);
+//			details.setClientAuthenticationScheme(AuthenticationScheme.header);
+			details.setScope(scopes);
+			details.setTokenName("RandomString_rVWOVHy8RV");
+			details.setUseCurrentUri(false);
+			
+			//details.setUserAuthorizationUri("http://localhost:8080/tonr2/");
+			return details;
+		}	
 
 		@Bean
 		public OAuth2ProtectedResourceDetails trusted() {
@@ -213,6 +260,28 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 					MediaType.valueOf("text/javascript")));
 			template.setMessageConverters(Arrays.<HttpMessageConverter<?>> asList(converter));
 			return template;
+		}
+		
+		@Bean
+		public OAuth2RestTemplate hubicRestTemplate(OAuth2ClientContext clientContext){
+//			OAuth2AccessToken token = new DefaultOAuth2AccessToken("1496764627vusANokB5veZ7nyibyX3OLOCOkQkFGqy9RvkOEnembVZ4aTT3wGxRABap37eZZSz");
+//			clientContext.setAccessToken(token);
+			//return new OAuth2RestTemplate(hubic(),clientContext);
+			
+			OAuth2RestTemplate template = new OAuth2RestTemplate(hubic(),clientContext);
+	        AccessTokenProvider accessTokenProvider = new AccessTokenProviderChain(
+	                Arrays.<AccessTokenProvider> asList(
+	                  new MyAuthorizationCodeAccessTokenProvider())
+//	                  new ImplicitAccessTokenProvider(), 
+//	                  new ResourceOwnerPasswordAccessTokenProvider(),
+//	                  new ClientCredentialsAccessTokenProvider())
+	              );
+	              template.setAccessTokenProvider(accessTokenProvider);
+	              return template;			
+			
+			
+			
+			
 		}
 
 		@Bean
